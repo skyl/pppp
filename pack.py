@@ -44,6 +44,25 @@ class Box(object):
                     Box(*(common[0], common[1], common[2]*2)),
             )
 
+    def __sub__(self, other):
+        l1 = sorted(self.tu)
+        copy = sorted(self.tu)
+        l2 = sorted(other.tu)
+        common = []
+        for v in l1:
+            if v in l2:
+                common.append(l2.pop(l2.index(v)))
+                copy.pop(copy.index(v))
+
+        if len(common) < 2:
+            return "Not a box"
+
+        if len(common) == 2:
+            return Box(*(common+[copy[0]-l2[0]]))
+
+        if len(common) == 3:
+            return None
+
     def __floordiv__(self, other):
         return self.x/other.x, self.y/other.y, self.z/other.z
 
