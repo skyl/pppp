@@ -1,4 +1,4 @@
-import numpy
+#import numpy
 import random
 import operator
 from itertools import permutations
