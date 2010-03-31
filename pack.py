@@ -7,7 +7,7 @@ magnitude = 1000
 
 class Box(object):
     """A rectangular prism"""
-    def __init__(self, x=None, y=None, z=None):
+    def __init__(self, x=None, y=None, z=None, *args, **kwargs):
         self.x = x if x else random.randint(1, magnitude)
         self.y = y if y else random.randint(1, magnitude)
         self.z = z if z else random.randint(1, magnitude)
@@ -63,7 +63,10 @@ class Box(object):
     def volume(self):
         return self.x * self.y * self.z
 
-
+class Container(Box):
+    def __init__(self, *args, **kwargs):
+        super(Container, self).__init__(*args, **kwargs)
+        self.cost = cost
 
 if __name__ == '__main__':
     container = Box()
