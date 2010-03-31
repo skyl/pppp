@@ -125,7 +125,6 @@ def count(iterable):
         counts[item] += 1
     return counts
 
->>>>>>> db4f88aab3a98e9a186d1ca823ae4b3af6eec64c:pack.py
 
 if __name__ == '__main__':
     container = Box()
