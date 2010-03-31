@@ -106,8 +106,9 @@ class Box(object):
 
 class Container(Box):
     def __init__(self, *args, **kwargs):
+        print kwargs
         super(Container, self).__init__(*args, **kwargs)
-        self.cost = cost
+        self.cost = kwargs['cost']
 
 
 import collections
