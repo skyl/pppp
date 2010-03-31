@@ -121,13 +121,28 @@ class BoxList(object):
     def __init__(self, li):
         self.li = li
 
+    def total_volume(self):
+        return reduce(operator.add, [i.volume() for i in self.li])
+
     def sorted(self, comp, **kwargs):
         return sorted(self.li, comp, **kwargs)
 
+    def sorted_volume(self,**kwargs):
+        return self.sorted(lambda x, y: cmp(x.volume(), y.volume()))
+
+    def sorted_x(self, **kwargs):
+        return self.sorted(lambda x, y: cmp(x.x, y.x))
+
+
 class ContainerList(BoxList):
     """A list of Containers"""
-    def cheapest_first(self):
+    def sorted_cost(self, **kwargs):
         return self.sorted(lambda x, y: cmp(x.cost, y.cost))
+
+
+def min_cost_required(container_list, item_list):
+    """Takes a list of containers and a list of items and returns the minimum cost"""
+    pass
 
 
 if __name__ == '__main__':
