@@ -106,9 +106,14 @@ class Box(object):
 
 class Container(Box):
     def __init__(self, *args, **kwargs):
-        print kwargs
         super(Container, self).__init__(*args, **kwargs)
         self.cost = kwargs['cost']
+
+    def __repr__(self):
+        return "Container%s, cost=%s" % (str(self.tu), self.cost)
+
+    def cost_per(self):
+        return float(self.cost)/(reduce(operator.mul, self.tu))
 
 
 import collections
