@@ -105,31 +105,29 @@ class Box(object):
         return self.x * self.y * self.z
 
 class Container(Box):
+    """A Box with a cost"""
     def __init__(self, *args, **kwargs):
         super(Container, self).__init__(*args, **kwargs)
         self.cost = kwargs['cost']
 
     def __repr__(self):
-        return "Container%s, cost=%s" % (str(self.tu), self.cost)
+        return "[Container%s, cost=%s]" % (str(self.tu), self.cost)
 
     def cost_per(self):
         return float(self.cost)/(reduce(operator.mul, self.tu))
 
+class BoxList(object):
+    """A list of Boxes"""
+    def __init__(self, li):
+        self.li = li
 
-import collections
+    def sorted(self, comp, **kwargs):
+        return sorted(self.li, comp, **kwargs)
 
-def count_shared_elements(*iterables):
-    n = 0
-    counts = map(count, iterables)
-    for item in min(counts, key=len):
-        n += min(count[item] for count in counts)
-    return n
-
-def count(iterable):
-    counts = collections.defaultdict(int)
-    for item in iterable:
-        counts[item] += 1
-    return counts
+class ContainerList(BoxList):
+    """A list of Containers"""
+    def cheapest_first(self):
+        return self.sorted(lambda x, y: cmp(x.cost, y.cost))
 
 
 if __name__ == '__main__':
