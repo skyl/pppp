@@ -1,4 +1,4 @@
-import numpy
+#import numpy
 import random
 import operator
 from itertools import permutations
@@ -19,8 +19,49 @@ class Box(object):
         return "Box%s" % str(self.tu)
 
     def __add__(self, other):
-        if self.num_common >= 2:
-            pass
+        """With two lengths in common, we add the 3rds.
+        
+        If 3 lengths are common, we return 3 different boxes to choose"""
+        l1 = sorted(self.tu)
+        copy = sorted(self.tu)
+        l2 = sorted(other.tu)
+        common = []
+        for v in l1:
+            if v in l2:
+                common.append(l2.pop(l2.index(v)))
+                copy.pop(copy.index(v))
+
+        if len(common) < 2:
+            return "Not a box"
+
+        if len(common) == 2:
+            return Box(*(common+[copy[0]+l2[0]]))
+
+        if len(common) == 3:
+            return (
+                    Box(*(common[0]*2, common[1], common[2])),
+                    Box(*(common[0], common[1]*2, common[2])),
+                    Box(*(common[0], common[1], common[2]*2)),
+            )
+
+    def __sub__(self, other):
+        l1 = sorted(self.tu)
+        copy = sorted(self.tu)
+        l2 = sorted(other.tu)
+        common = []
+        for v in l1:
+            if v in l2:
+                common.append(l2.pop(l2.index(v)))
+                copy.pop(copy.index(v))
+
+        if len(common) < 2:
+            return "Not a box"
+
+        if len(common) == 2:
+            return Box(*(common+[copy[0]-l2[0]]))
+
+        if len(common) == 3:
+            return None
 
     def __floordiv__(self, other):
         return self.x/other.x, self.y/other.y, self.z/other.z
@@ -67,6 +108,24 @@ class Container(Box):
     def __init__(self, *args, **kwargs):
         super(Container, self).__init__(*args, **kwargs)
         self.cost = cost
+
+
+import collections
+
+def count_shared_elements(*iterables):
+    n = 0
+    counts = map(count, iterables)
+    for item in min(counts, key=len):
+        n += min(count[item] for count in counts)
+    return n
+
+def count(iterable):
+    counts = collections.defaultdict(int)
+    for item in iterable:
+        counts[item] += 1
+    return counts
+
+>>>>>>> db4f88aab3a98e9a186d1ca823ae4b3af6eec64c:pack.py
 
 if __name__ == '__main__':
     container = Box()
