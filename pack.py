@@ -4,7 +4,6 @@ import operator
 from itertools import permutations
 
 magnitude = 1000
-
 class Box(object):
     """A rectangular prism"""
     def __init__(self, x=None, y=None, z=None, *args, **kwargs):
@@ -117,7 +116,7 @@ class Container(Box):
         return float(self.cost)/(reduce(operator.mul, self.tu))
 
 class BoxList(object):
-    """A list of Boxes"""
+    """A list of types of Boxes"""
     def __init__(self, li):
         self.li = li
 
@@ -139,6 +138,10 @@ class ContainerList(BoxList):
     def sorted_cost(self, **kwargs):
         return self.sorted(lambda x, y: cmp(x.cost, y.cost))
 
+class LineItem(BoxList):
+    """For creating a list of multiple Boxes of the same type"""
+    def __init__(self, box, num):
+        self.li = [box for i in range(num)]
 
 def min_cost_required(container_list, item_list):
     """Takes a list of containers and a list of items and returns the minimum cost"""
@@ -146,12 +149,29 @@ def min_cost_required(container_list, item_list):
 
 
 if __name__ == '__main__':
-    container = Box()
-    i = Box(25,35,10)
+    container_list = ContainerList([
+        Container(10,10,10, cost=1000),
+        Container(20,10,10, cost=1900),
+        Container(20,20,10, cost=3800),
+    ])
+    box_list = BoxList(
+        reduce(operator.add, [
+                LineItem(Box(1,1,1), 5).li,
+                LineItem(Box(5,5,5), 1).li,
+        ])
+    )
+
+    i = Box(23,22,142)
+    container = Container(412357,239457,52348, cost=100)
     print container
     print "filling with ", i
     for box, mult in container.fill_with(i):
         print box, '*', mult, '=', box*mult, 'for volume =', (box*mult).volume(), 'number = ', reduce(operator.mul,mult)
+
+    from IPython.Shell import IPShellEmbed
+    ipython = IPShellEmbed()
+    ipython()
+
 
 """
 >>> from pack import *
